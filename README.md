@@ -126,6 +126,61 @@ Apply complete! Resources: 25 added, 0 changed, 0 destroyed.
 
 ```
 
+### Resultado
+
+EKS namespaces, pods, services
+```
+$ k get namespaces -A
+NAME                STATUS   AGE
+crossplane-system   Active   13m
+default             Active   17m
+kube-node-lease     Active   17m
+kube-public         Active   17m
+kube-system         Active   17m
+
+$ k get pods -A
+NAMESPACE           NAME                                                 READY   STATUS    RESTARTS       AGE
+crossplane-system   crossplane-85445f5889-6szw5                          1/1     Running   0              13m
+crossplane-system   crossplane-rbac-manager-54d465dccf-sdqqj             1/1     Running   0              13m
+crossplane-system   upbound-provider-aws-b52ad4c74cbf-64cdb9585d-vztp5   1/1     Running   1 (8m9s ago)   10m
+default             argocd-application-controller-0                      1/1     Running   0              13m
+default             argocd-applicationset-controller-5c59899fbb-lxzhg    1/1     Running   0              13m
+default             argocd-dex-server-57bb79b4f5-bjm25                   1/1     Running   0              13m
+default             argocd-notifications-controller-6995b677fc-wnmg2     1/1     Running   0              13m
+default             argocd-redis-77c9c444d4-b4k2x                        1/1     Running   0              13m
+default             argocd-repo-server-7847ccdcff-4jhnq                  1/1     Running   0              13m
+default             argocd-server-748b69b678-zt7sm                       1/1     Running   0              13m
+kube-system         aws-node-8tf8x                                       1/1     Running   0              12m
+kube-system         aws-node-dzhz9                                       1/1     Running   0              12m
+kube-system         aws-node-sqjpc                                       1/1     Running   0              12m
+kube-system         coredns-79df7fff65-hsshf                             1/1     Running   0              17m
+kube-system         coredns-79df7fff65-pw8kd                             1/1     Running   0              17m
+kube-system         kube-proxy-f7v4s                                     1/1     Running   0              12m
+kube-system         kube-proxy-s9pg7                                     1/1     Running   0              12m
+kube-system         kube-proxy-twp26                                     1/1     Running   0              12m
+
+$ k get services
+NAME                               TYPE           CLUSTER-IP       EXTERNAL-IP                                                              PORT(S)                      AGE
+argocd-applicationset-controller   ClusterIP      172.20.49.172    <none>                                                                   7000/TCP                     13m
+argocd-dex-server                  ClusterIP      172.20.218.143   <none>                                                                   5556/TCP,5557/TCP            13m
+argocd-redis                       ClusterIP      172.20.185.63    <none>                                                                   6379/TCP                     13m
+argocd-repo-server                 ClusterIP      172.20.194.196   <none>                                                                   8081/TCP                     13m
+argocd-server                      LoadBalancer   172.20.154.179   ab096085203e84d009d23a13a22d3417-382379193.us-east-1.elb.amazonaws.com   80:30506/TCP,443:32191/TCP   13m
+kubernetes                         ClusterIP      172.20.0.1       <none>                                                                   443/TCP                      17m
+```
+
+
+ArgoCD LoadBalancer
+
+```
+$ k get svc argocd-server
+NAME            TYPE           CLUSTER-IP       EXTERNAL-IP                                                              PORT(S)                      AGE
+argocd-server   LoadBalancer   172.20.154.179   ab096085203e84d009d23a13a22d3417-382379193.us-east-1.elb.amazonaws.com   80:30506/TCP,443:32191/TCP   18m
+```
+
+Con esta EXTERNAL-IP en Route53 se puede configurar un nuevo registro tipo A con Alias
+
+![Create Record](/img/create_record.png)
 
 
 
